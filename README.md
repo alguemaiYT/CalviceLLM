@@ -112,6 +112,10 @@ Para adicionar um novo rosto ao sistema:
 - **Otimizações:**
   - `faster-whisper` é usado no lugar do Whisper original por ser mais rápido e consumir menos memória.
   - A detecção de wake word é feita localmente com uma ferramenta de baixo consumo para evitar o uso constante de recursos mais pesados.
+- **Latência (Testes Iniciais):**
+  - Latência "raw" do script `grok_request.py` (sem criação de sockets):
+    - ⏱️ Imports: 4.302278280258179s
+    - ⏱️ Instanciação do client: 0.5843939781188965s
 
 ## Roadmap
 
