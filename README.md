@@ -112,6 +112,7 @@ Para adicionar um novo rosto ao sistema:
 - **Otimizações:**
   - `faster-whisper` é usado no lugar do Whisper original por ser mais rápido e consumir menos memória.
   - A detecção de wake word é feita localmente com uma ferramenta de baixo consumo para evitar o uso constante de recursos mais pesados.
+  - Primeiramente Pretendo Ultilizar a API Gratuita do `Gladia STT`, Pois a orangepipc Não Tem Hardware Condizente
 
 ## Roadmap
 
