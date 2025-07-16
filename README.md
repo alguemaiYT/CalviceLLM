@@ -128,6 +128,7 @@ Para adicionar um novo rosto ao sistema:
 ## Histórico de Desenvolvimento
 
 - **2024-05-23:** Configuração inicial do servidor (serviço) interno de comunicação com a LLM Grok.
+- **Desde o início do projeto:** Otimização contínua do ambiente de desenvolvimento para a Orange Pi PC, com foco em desempenho e baixo consumo de recursos. Isso incluiu a criação de uma toolchain de **cross-compilação otimizada com `-O3`**, ajustes finos de `CFLAGS` e `LDFLAGS`, e a configuração de um `sysroot` com `crosstool-ng` e `buildroot`. Foi necessário resolver dependências para a arquitetura ARMv7-A (Cortex-A7), aplicar patches no kernel, criar imagens `initramfs` minimalistas e reconfigurar o GCC para `floating point hard` (`-mfpu=neon-vfpv4`, `-mfloat-abi=hard`) e `--with-arch=armv7-a`. O resultado é um sistema operacional customizado, rápido e leve, ideal para a execução de tarefas em tempo real com recursos mínimos.
 
 ## Licença
 
