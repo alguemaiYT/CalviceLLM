@@ -125,6 +125,10 @@ Para adicionar um novo rosto ao sistema:
 - [ ] Melhorar a comunicação entre os scripts (ex: usando MQTT ou um sistema de filas leve).
 - [ ] Adicionar mais testes e documentação.
 
+## Histórico de Desenvolvimento
+
+- **2024-05-23:** Configuração inicial do servidor (serviço) interno de comunicação com a LLM Grok.
+
 ## Licença
 
 Este projeto está licenciado sob a [Licença MIT](LICENSE).
