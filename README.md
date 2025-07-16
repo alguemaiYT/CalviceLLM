@@ -1,8 +1,12 @@
 # Grok-on-Pi: Assistente Inteligente Embarcado para Orange Pi
 
+*Um projeto desenvolvido em parceria com o grupo DragonBotz (G.E.R.A.) do IFSP-Sorocaba.*
+
 ![Status: Em Desenvolvimento](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
 
 Um assistente inteligente modular e leve, projetado para rodar em hardware limitado como a Orange Pi PC. O projeto utiliza uma combinação de ferramentas locais e APIs para fornecer uma experiência de assistente ativada por voz, com reconhecimento facial para interações personalizadas.
+
+Este projeto, embora desenvolvido de forma independente, contou com o apoio institucional não-oficial e o incentivo da equipe DragonBotz, com colaboração especial de Heiton Curto Gomes. A iniciativa nasceu dentro de um ambiente de pesquisa em robótica educacional e sistemas embarcados.
 
 ## Tecnologias e Bibliotecas
 
