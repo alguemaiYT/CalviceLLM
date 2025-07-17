@@ -142,7 +142,7 @@ Para adicionar um novo rosto ao sistema:
 - **08/06/2025:** Tentativa de integração com o Home Assistant, que se mostrou inviável devido à falta de suporte e addons para a arquitetura ARMv7, com a maioria dos recursos focados em x86_64.
 - **20/06/2025:** Organização do código e da estrutura do projeto em um repositório no GitHub para controle de versão e backup, marcando o fim da "Fase 1" de prototipagem. Adoção de `git push/pull` via CLI com commits funcionais.
 - **24/06/2025:** Refatoração do ambiente e reorganização das etapas do projeto com base nos aprendizados dos protótipos. Revisão do kernel, módulos e refinamento do build para maior modularidade e implementação de fallbacks.
-- **2024-05-23:** Configuração final do servidor (serviço) interno de comunicação com a LLM Grok, otimizado para o ambiente customizado.
+- **23/05/2025:** Configuração final do servidor (serviço) interno de comunicação com a LLM Grok, otimizado para o ambiente customizado.
 
 ## Licença
 
