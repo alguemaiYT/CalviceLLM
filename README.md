@@ -1,6 +1,6 @@
 # Grok-on-Pi: Assistente Inteligente Embarcado
 
-*Um projeto de pesquisa e desenvolvimento em sistemas embarcados, nascido no [IFSP-Sorocaba](https://sor.ifsp.edu.br/) com o apoio institucional do grupo de robótica [DragonBotz (G.E.R.A.)](https://www.instagram.com/dragonbot.z/).*
+*Um projeto de pesquisa e desenvolvimento em sistemas embarcados, nascido no [IFSP-Sorocaba](https://sor.ifsp.edu.br/) com o apoio institucional do grupo de robótica [DragonBotz (G.E.R.A.)](https://www.instagram.com/dragonbotz/).*
 
 ![Status: Em Desenvolvimento](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
 
@@ -36,13 +36,14 @@ O repositório é organizado em fases, representando cada módulo do pipeline:
 
 ```
 /
-├── fase_1_wakeword/
+├── 1_wake_word_detection/
 │   └── openwakeword/
-├── fase_2_stt/
-│   └── google_cloud_api/
-├── fase_3_llm/
+├── 2_speech_to_text/
+│   ├── google_cloud_stt/
+│   └── ibm_cloud_stt/
+├── 3_language_model/
 │   └── grok_api/
-├── fase_4_tts/
+├── 4_text_to_speech/
 │   └── ...
 └── README.md
 ```
