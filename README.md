@@ -36,14 +36,14 @@ O repositório é organizado em fases, representando cada módulo do pipeline:
 
 ```
 /
-├── 1_wake_word_detection/
+├── Wake Word Detection/
 │   └── openwakeword/
-├── 2_speech_to_text/
+├── Speech to Text/
 │   ├── google_cloud_stt/
 │   └── ibm_cloud_stt/
-├── 3_language_model/
+├── Language Model/
 │   └── grok_api/
-├── 4_text_to_speech/
+├── Text to Speech/
 │   └── ...
 └── README.md
 ```
