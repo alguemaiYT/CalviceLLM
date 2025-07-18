@@ -1,148 +1,68 @@
-# Grok-on-Pi: Assistente Inteligente Embarcado para Orange Pi
+# Grok-on-Pi: Assistente Inteligente Embarcado
 
-*Um projeto desenvolvido em parceria com o grupo DragonBotz (G.E.R.A.) do IFSP-Sorocaba.*
+*Um projeto de pesquisa e desenvolvimento em sistemas embarcados, nascido no [IFSP-Sorocaba](https://sor.ifsp.edu.br/) com o apoio institucional do grupo de robótica [DragonBotz (G.E.R.A.)](https://www.instagram.com/dragonbotz/).*
 
 ![Status: Em Desenvolvimento](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
 
-Um assistente inteligente modular e leve, projetado para rodar em hardware limitado como a Orange Pi PC. O projeto utiliza uma combinação de ferramentas locais e APIs para fornecer uma experiência de assistente ativada por voz, com reconhecimento facial para interações personalizadas.
+## Visão Geral
+
+O Grok-on-Pi é um assistente de voz projetado para rodar em hardware de baixo custo e recursos limitados, como a **Orange Pi PC**. A principal filosofia do projeto é a **modularidade** e a **eficiência**, permitindo que cada componente (wake word, STT, LLM, TTS) seja executado de forma independente e otimizada para a arquitetura ARMv7.
 
 Este projeto, embora desenvolvido de forma independente, contou com o apoio institucional não-oficial e o incentivo da equipe DragonBotz, com colaboração especial de Heiton Curto Gomes. A iniciativa nasceu dentro de um ambiente de pesquisa em robótica educacional e sistemas embarcados.
 
-## Tecnologias e Bibliotecas
+## Arquitetura e Fluxo de Execução
 
-O foco principal é a utilização de tecnologias leves e eficientes para garantir a performance no Orange Pi.
+O sistema opera em um pipeline claro e desacoplado:
 
-- **Hardware:** Orange Pi PC
-- **Detecção de Wake Word:** [openWakeWord](https://github.com/dscripka/openWakeWord) - uma solução leve e de código aberto para detecção de wake word.
-- **Speech-to-Text (STT):**
-  - **Local:** [faster-whisper](https://github.com/guillaumekln/faster-whisper) - uma implementação otimizada do Whisper da OpenAI para rodar em CPU.
-  - **API:** [Gladia API](https://gladia.io/) - como alternativa para transcrição na nuvem.
-- **Processamento de Linguagem Natural (LLM):** [API do Grok](https://grok.x.ai/) - para geração de respostas inteligentes.
-- **Reconhecimento Facial:** [OpenCV](https://opencv.org/) - para detecção e reconhecimento de rostos.
-- **Text-to-Speech (TTS):** (A ser definido) - em busca de uma solução leve, possivelmente baseada em [espeak-ng](https://github.com/espeak-ng/espeak-ng) ou similar.
+1.  **Detecção de Wake Word:** O sistema é ativado por uma palavra-chave, detectada localmente por uma ferramenta leve como `openWakeWord`.
+2.  **Speech-to-Text (STT):** O áudio capturado é enviado para a **API do Google Cloud Speech-to-Text**, que oferece alta precisão e baixo impacto no hardware local. *Nota: A solução inicial com `faster-whisper` foi descontinuada devido a problemas de compatibilidade e performance na arquitetura ARMv7.*
+3.  **Processamento de Linguagem (LLM):** O texto transcrito é enviado para a **API do Grok**, que gera a resposta.
+4.  **Text-to-Speech (TTS):** A resposta textual é convertida em áudio (em desenvolvimento).
+5.  **Reconhecimento Facial (Paralelo):** Uma thread separada utiliza `OpenCV` para detectar e reconhecer rostos, permitindo interações personalizadas com base em um banco de dados local.
 
-## Arquitetura do Sistema
+## Stack de Tecnologias
 
-O sistema é projetado para ser modular, com cada componente rodando como um script separado.
+-   **Hardware Primário:** Orange Pi PC (ARMv7-A Cortex-A7)
+-   **Sistema Operacional:** Linux customizado (baseado em `buildroot` e `crosstool-ng`) com otimizações de compilação (`-O3`, `-mfpu=neon-vfpv4`, `-mfloat-abi=hard`).
+-   **Wake Word:** `openWakeWord`
+-   **Speech-to-Text (STT):** Google Cloud Speech-to-Text API
+-   **LLM:** Grok API (via `x.ai`)
+-   **Reconhecimento Facial:** `OpenCV`
+-   **TTS (em avaliação):** `piper_tts`, `rhvoice`, `espeak-ng`
+
+## Estrutura do Projeto
+
+O repositório é organizado em fases, representando cada módulo do pipeline:
 
 ```
-Entrada de Áudio --> [Wake Word Detection] --ativa--> [Speech-to-Text] --> "Texto Transcrito" --> [API do Grok] --> "Resposta Gerada" --> [Text-to-Speech / Saída de Texto]
+/
+├── fase_1_wakeword/
+│   └── openwakeword/
+├── fase_2_stt/
+│   └── google_cloud_api/
+├── fase_3_llm/
+│   └── grok_api/
+├── fase_4_tts/
+│   └── ...
+└── README.md
 ```
 
-Paralelamente, a câmera está sempre ativa:
-
-```
-Entrada de Vídeo --> [Reconhecimento Facial com OpenCV] --> Identifica Usuário --> Carrega Contexto/Personalidade --> Informa a Lógica Principal
-```
-
-## Instruções de Instalação (Orange Pi)
-
-**Pré-requisitos:**
-- Orange Pi PC com uma imagem de sistema operacional baseada em Debian (ex: Armbian).
-- Microfone USB e Câmera USB conectados.
-- Acesso à internet.
-
-**Passo a passo:**
-
-1. **Clone o repositório:**
-   ```bash
-   git clone https://github.com/seu-usuario/grok-on-pi.git
-   cd grok-on-pi
-   ```
-
-2. **Crie e ative um ambiente virtual:**
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   ```
-
-3. **Instale as dependências:**
-   *As dependências exatas serão listadas no arquivo `requirements.txt`.*
-   ```bash
-   pip install -r requirements.txt
-   ```
-   *Nota: A instalação do OpenCV e outras bibliotecas pode exigir dependências de sistema. Consulte a documentação de cada uma para obter instruções detalhadas.*
-
-## Como Rodar
-
-Cada funcionalidade principal é um script separado. Você precisará de múltiplos terminais para rodá-los em paralelo.
-
-1. **Terminal 1: Wake Word Detection**
-   ```bash
-   python wake_word_detector.py
-   ```
-   *Este script escutará o microfone e, ao detectar a wake word, acionará o script de STT.*
-
-2. **Terminal 2: Speech-to-Text**
-   *Este script será acionado pelo detector de wake word.*
-
-3. **Terminal 3: Reconhecimento Facial**
-   ```bash
-   python facial_recognition.py
-   ```
-   *Este script monitora a câmera, identifica rostos e disponibiliza a identidade do usuário para os outros módulos.*
-
-## Adicionando Novos Rostos
-
-Para adicionar um novo rosto ao sistema:
-
-1. **Crie uma ficha de personalidade:**
-   Adicione um novo arquivo JSON em `data/faces/` com o nome da pessoa (ex: `ana.json`).
-   ```json
-   {
-     "nome": "Ana",
-     "personalidade": "amigável e curiosa",
-     "contexto": "colega de trabalho, especialista em marketing"
-   }
-   ```
-
-2. **Capture as imagens do rosto:**
-   Execute o script de captura de imagens, que salvará as fotos no diretório `data/faces/<nome>/`.
-   ```bash
-   python capture_faces.py --nome ana
-   ```
-   *Tire várias fotos com diferentes ângulos e iluminações.*
-
-3. **Treine o modelo de reconhecimento:**
-   Execute o script de treinamento para que o sistema aprenda a reconhecer o novo rosto.
-   ```bash
-   python train_model.py
-   ```
-
-## Considerações de Performance
-
-- **Hardware Limitado:** A Orange Pi PC não possui GPU dedicada. Todas as operações são otimizadas para CPU.
-- **Scripts Modulares:** A separação dos scripts permite que cada processo utilize os recursos de forma mais eficiente.
-- **Otimizações:**
-  - `faster-whisper` é usado no lugar do Whisper original por ser mais rápido e consumir menos memória.
-  - A detecção de wake word é feita localmente com uma ferramenta de baixo consumo para evitar o uso constante de recursos mais pesados.
-- **Latência (Testes Iniciais):**
-  - Latência "raw" do script `grok_request.py` (sem criação de sockets):
-    - ⏱️ Imports: 4.302278280258179s
-    - ⏱️ Instanciação do client: 0.5843939781188965s
-
-## Roadmap
-
-- [ ] Implementar o script de Text-to-Speech (TTS).
-- [ ] Integrar a base de dados de rostos com a lógica principal para personalizar as respostas do Grok.
-- [ ] Criar um script principal para orquestrar a inicialização de todos os módulos.
-- [ ] Melhorar a comunicação entre os scripts (ex: usando MQTT ou um sistema de filas leve).
-- [ ] Adicionar mais testes e documentação.
+Cada subdiretório contém um `README.md` específico e scripts de exemplo.
 
 ## Histórico de Desenvolvimento
 
 ### Fase 0: Prototipagem e Otimização do Ambiente
 
-- **Desde o início do projeto:** Otimização contínua do ambiente de desenvolvimento para a Orange Pi PC, com foco em desempenho e baixo consumo de recursos. Isso incluiu a criação de uma toolchain de **cross-compilação otimizada com `-O3`**, ajustes finos de `CFLAGS` e `LDFLAGS`, e a configuração de um `sysroot` com `crosstool-ng` e `buildroot`. Foi necessário resolver dependências para a arquitetura ARMv7-A (Cortex-A7), aplicar patches no kernel, criar imagens `initramfs` minimalistas e reconfigurar o GCC para `floating point hard` (`-mfpu=neon-vfpv4`, `-mfloat-abi=hard`) e `--with-arch=armv7-a`.
-- **Protótipos iniciais:** Os primeiros protótipos para cada etapa do sistema apresentaram problemas de compilação, travamentos relacionados à arquitetura e conflitos com drivers (ex: Wi-Fi), principalmente devido a bibliotecas e firmwares otimizados apenas para x86.
+-   **Desde o início do projeto:** Foco na criação de um ambiente de desenvolvimento otimizado para a Orange Pi PC. Isso envolveu a construção de uma toolchain de **cross-compilação com `-O3`**, ajustes de `CFLAGS`/`LDFLAGS` e a configuração de um `sysroot` com `crosstool-ng` e `buildroot`. Foram aplicados patches no kernel e reconfigurado o GCC para a arquitetura ARMv7-A com `floating point hard`.
+-   **Protótipos iniciais:** Os primeiros testes revelaram problemas de compilação e instabilidade com bibliotecas otimizadas apenas para x86, exigindo uma abordagem mais customizada.
 
 ### Fase 1: Testes, Integração e Versionamento
 
-- **07/06/2025:** Início da fase de testes de soluções de STT (Speech-to-Text), com foco em leveza, precisão e compatibilidade com o ambiente ARMv7 minimalista. Foram avaliados servidores prontos e APIs, com análise de latência e consumo de recursos.
-- **08/06/2025:** Tentativa de integração com o Home Assistant, que se mostrou inviável devido à falta de suporte e addons para a arquitetura ARMv7, com a maioria dos recursos focados em x86_64.
-- **20/06/2025:** Organização do código e da estrutura do projeto em um repositório no GitHub para controle de versão e backup, marcando o fim da "Fase 1" de prototipagem. Adoção de `git push/pull` via CLI com commits funcionais.
-- **24/06/2025:** Refatoração do ambiente e reorganização das etapas do projeto com base nos aprendizados dos protótipos. Revisão do kernel, módulos e refinamento do build para maior modularidade e implementação de fallbacks.
-- **23/05/2025:** Configuração final do servidor (serviço) interno de comunicação com a LLM Grok, otimizado para o ambiente customizado.
+-   **07/06/2025:** Início dos testes de soluções de STT. A avaliação de modelos locais como `faster-whisper` mostrou-se inviável, levando à decisão de usar APIs na nuvem.
+-   **08/06/2025:** Tentativa de integração com o Home Assistant, abandonada pela falta de suporte a ARMv7 na comunidade de addons.
+-   **20/06/2025:** Estruturação do projeto no GitHub para controle de versão.
+-   **24/06/2025:** Refatoração do ambiente com base nos aprendizados, melhorando a modularidade.
+-   **16/06/2025 - 17/06/2025:** Aquisição e configuração dos serviços de API do Google Cloud (Speech-to-Text) e Grok (LLM).
 
 ## Licença
 
