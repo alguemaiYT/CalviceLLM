@@ -1,6 +1,6 @@
 # Grok-on-Pi: Assistente Inteligente Embarcado
 
-*Um projeto de pesquisa e desenvolvimento em sistemas embarcados, nascido no [IFSP-Sorocaba](https://sor.ifsp.edu.br/) com o apoio institucional do grupo de robótica [DragonBotz (G.E.R.A.)](https://www.instagram.com/dragonbotz/).*
+*Um projeto de pesquisa e desenvolvimento em sistemas embarcados, nascido no [IFSP-Sorocaba](https://sor.ifsp.edu.br/) com o apoio institucional do grupo de robótica [DragonBotz (G.E.R.A.)](https://www.instagram.com/dragonbot.z/).*
 
 ![Status: Em Desenvolvimento](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
 
