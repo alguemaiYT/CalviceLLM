@@ -64,6 +64,7 @@ Cada subdiretório contém um `README.md` específico e scripts de exemplo.
 -   **20/06/2025:** Estruturação do projeto no GitHub para controle de versão.
 -   **24/06/2025:** Refatoração do ambiente com base nos aprendizados, melhorando a modularidade.
 -   **16/06/2025 - 17/06/2025:** Aquisição e configuração dos serviços de API do Google Cloud (Speech-to-Text) e Grok (LLM).
+-   **19/07/2025:** Conclusão da primeira versão do algoritmo de wake word, com a integração do **Porcupine Picovoice**, escolhido por sua alta precisão. O processo exigiu a compilação de toolchains e uma cross-compilação para ARMv7 com suporte a NEON.
 
 ## Licença
 
