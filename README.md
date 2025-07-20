@@ -67,6 +67,16 @@ Cada subdiretório contém um `README.md` específico e scripts de exemplo.
 -   **17/07/2025 - 18/07/2025:** Configuração de protótipos básicos para teste do protocolo interno de comunicação com os serviços de STT.
 -   **19/07/2025:** Conclusão da primeira versão do algoritmo de wake word, com a integração do **Porcupine Picovoice**, escolhido por sua alta precisão. O processo exigiu a compilação de toolchains e uma cross-compilação para ARMv7 com suporte a NEON.
 
+## Pesquisa e Desenvolvimento Futuro: Artigo Científico
+
+Atualmente, está em elaboração um projeto de artigo científico com base neste trabalho. O foco da pesquisa é o desenvolvimento de um algoritmo inovador para a fase de STT, que não dependa de *custom words* e busque uma precisão superior através da análise de fonemas.
+
+A proposta de fluxo é a seguinte:
+
+`Voz -> Wake Word -> STT -> Transcrição de Fonemas -> Análise Gráfica dos Fonemas -> LLM (para conversão de fonema em palavra) -> LLM (para geração de resposta) -> Saída`
+
+Essa abordagem visa alcançar uma precisão de transcrição comparável a modelos de ponta como os utilizados no chat de voz do ChatGPT e Gemini, ao custo de um maior processamento em servidor para a análise fonética e múltiplas chamadas à LLM.
+
 ## Licença
 
 Este projeto está licenciado sob a [Licença MIT](LICENSE).
