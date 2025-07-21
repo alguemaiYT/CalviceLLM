@@ -90,6 +90,34 @@ Para garantir a máxima eficiência em hardware limitado, diversas otimizações
     -   **Logging Controlado:** Nível de log ajustado para `INFO` ou `WARNING` para evitar overhead de I/O causado por logging excessivo.
     -   **Benchmarking:** Testes com `dd` e `fio` para comparar a performance de I/O entre o `/tmp` padrão e um RAM disk configurado manualmente.
 
+## Benchmarks de Latência da API
+
+Os seguintes benchmarks foram medidos em um **Orange Pi PC**, acessando localmente os endpoints da API, e representam o tempo de ida e volta ao serviço externo da xAI.
+
+### 1. Chat Completion (Non-Streaming)
+-   **Latência média:** ~3,2 s por requisição.
+-   **Descrição:** Processa o texto do usuário e retorna a resposta completa após a geração de todo o conteúdo.
+-   **Aplicações:** Chatbots conversacionais, assistentes de texto, sistemas de FAQ.
+
+### 2. Chat Streaming
+-   **Latência inicial:** ~0,4 s para o primeiro "chunk".
+-   **Descrição:** Ideal para aplicações que precisam exibir a resposta em tempo real, à medida que é gerada.
+-   **Aplicações:** Assistentes de voz interativos, ditado em tempo real.
+
+### 3. Vision Analysis
+-   **Latência média:** ~3,3 s por análise de imagem.
+-   **Descrição:** Recebe uma imagem (URL ou upload) e retorna metadados sobre seu conteúdo.
+-   **Aplicações:** Moderação de conteúdo, OCR, extração de dados.
+
+### 4. Image Generation
+-   **Latência média:** ~12,5 s por imagem gerada.
+-   **Descrição:** Cria imagens de alta qualidade a partir de um prompt de texto.
+-   **Aplicações:** Geração de assets para design, prototipagem de mockups.
+
+### Observações Finais
+-   Para um pipeline de voz completo, a latência total é a soma de cada etapa: `captura de áudio + wake word + STT + chamada ao LLM + TTS + reprodução de áudio`.
+-   É altamente recomendável realizar benchmarks específicos em seu hardware e rede para ajustar os parâmetros e otimizar a experiência.
+
 ## Pesquisa e Desenvolvimento Futuro: Artigo Científico
 
 Atualmente, está em elaboração um projeto de artigo científico com base neste trabalho. O foco da pesquisa é o desenvolvimento de um algoritmo inovador para a fase de STT, que não dependa de *custom words* e busque uma precisão superior através da análise de fonemas.
