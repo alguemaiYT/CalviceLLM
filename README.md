@@ -18,7 +18,7 @@ O sistema opera em um pipeline claro e desacoplado:
 2.  **Speech-to-Text (STT):** O áudio capturado é enviado para a **API do Google Cloud Speech-to-Text**, que oferece alta precisão e baixo impacto no hardware local. *Nota: A solução inicial com `faster-whisper` foi descontinuada devido a problemas de compatibilidade e performance na arquitetura ARMv7.*
 3.  **Processamento de Linguagem (LLM):** O texto transcrito é enviado para a **API do Grok**, que gera a resposta.
 4.  **Text-to-Speech (TTS):** A resposta textual é convertida em áudio (em desenvolvimento).
-5.  **Reconhecimento Facial (Paralelo):** Uma thread separada utiliza `OpenCV` para detectar e reconhecer rostos, permitindo interações personalizadas com base em um banco de dados local.
+5.  **Reconhecimento Facial (Paralelo):** Uma thread separada utiliza `OpenCV` para detectar e reconhecer rostos, permitindo interações personalizadas com base em um banco de dados local. A análise de imagem da API Grok (`Vision Analysis`) é uma alternativa opcional para esta etapa.
 
 ## Stack de Tecnologias
 
@@ -107,7 +107,7 @@ Os seguintes benchmarks foram medidos em um **Orange Pi PC**, acessando localmen
 ### 3. Vision Analysis
 -   **Latência média:** ~3,3 s por análise de imagem.
 -   **Descrição:** Recebe uma imagem (URL ou upload) e retorna metadados sobre seu conteúdo.
--   **Aplicações:** Moderação de conteúdo, OCR, extração de dados.
+-   **Aplicações:** Moderação de conteúdo, OCR, extração de dados. *No contexto deste projeto, é uma alternativa opcional ao `OpenCV` para análise de imagens.*
 
 ### 4. Image Generation
 -   **Latência média:** ~12,5 s por imagem gerada.
