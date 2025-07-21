@@ -67,6 +67,29 @@ Cada subdiretório contém um `README.md` específico e scripts de exemplo.
 -   **17/07/2025 - 18/07/2025:** Configuração de protótipos básicos para teste do protocolo interno de comunicação com os serviços de STT.
 -   **19/07/2025:** Conclusão da primeira versão do algoritmo de wake word, com a integração do **Porcupine Picovoice**, escolhido por sua alta precisão. O processo exigiu a compilação de toolchains e uma cross-compilação para ARMv7 com suporte a NEON.
 
+## Otimizações e Performance
+
+Para garantir a máxima eficiência em hardware limitado, diversas otimizações estão sendo implementadas e testadas:
+
+-   **Gerenciamento de Memória e Cache:**
+    -   **Cache LRU:** Substituição de `OrderedDict` por `cachetools.LRUCache` para um cache de acesso rápido com implementações em C, reduzindo o overhead.
+    -   **Cache Semântico:** Implementação de um cache mais inteligente usando *embeddings* para identificar perguntas semanticamente similares e evitar chamadas redundantes à API.
+
+-   **Manipulação de Dados e Conexões:**
+    -   **Minimização de Operações de String:** Redução de chamadas `strip()` e otimização da decodificação de mensagens (`data.rstrip(b'\\n\\r').decode('utf-8', 'ignore')`) para diminuir o custo de manipulação de strings.
+    -   **Reutilização de Estruturas:** O payload JSON base e os headers são preparados uma única vez e reutilizados, alterando apenas o conteúdo dinâmico a cada requisição.
+    -   **Conexões Persistentes:** Uso e reutilização de `aiohttp.ClientSession` e `TCPConnector` para manter conexões HTTP ativas e reduzir a latência em chamadas repetidas.
+    -   **Fechamento Limpo:** Utilização de `await writer.wait_closed()` para garantir que as conexões sejam fechadas corretamente, evitando problemas de concorrência.
+
+-   **Redução de I/O e Latência Percebida:**
+    -   **Execução em RAM:** O daemon é executado a partir de um `tmpfs` (RAM disk), como `/tmp` ou um `/mnt/ramdisk` montado manualmente, para eliminar gargalos de I/O do cartão SD.
+    -   **Streaming de Resposta:** Implementação do modo `stream=True` nas chamadas de API para processar tokens de resposta assim que chegam, diminuindo a latência percebida pelo usuário.
+
+-   **Monitoramento e Diagnóstico:**
+    -   **Medição de Latência Precisa:** Uso de `time.monotonic_ns()` para medições de performance de alta precisão, imunes a alterações no relógio do sistema.
+    -   **Logging Controlado:** Nível de log ajustado para `INFO` ou `WARNING` para evitar overhead de I/O causado por logging excessivo.
+    -   **Benchmarking:** Testes com `dd` e `fio` para comparar a performance de I/O entre o `/tmp` padrão e um RAM disk configurado manualmente.
+
 ## Pesquisa e Desenvolvimento Futuro: Artigo Científico
 
 Atualmente, está em elaboração um projeto de artigo científico com base neste trabalho. O foco da pesquisa é o desenvolvimento de um algoritmo inovador para a fase de STT, que não dependa de *custom words* e busque uma precisão superior através da análise de fonemas.
